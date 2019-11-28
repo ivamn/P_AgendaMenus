@@ -34,15 +34,17 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
     private final int COD_ELEGIR_IMAGEN = 3;
     private final int COD_TOMAR_FOTO = 4;
 
+    public VistaContactos(ArrayList<Contacto> contactos) {
+        this.contactos = contactos;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.vista_contactos, container, false);
 
-
         swipeDetector = new SwipeDetector();
-        cargarDatos();
         adaptador = new Adaptador(contactos);
         recyclerView = rootView.findViewById(R.id.recycler);
         recyclerView.setAdapter(adaptador);
@@ -99,7 +101,7 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
                     break;
             }
         } else {
-            clickItemListener.OnSelectedItemListener(contacto);
+            clickItemListener.OnClickItemListener(contacto, recyclerView.getChildAdapterPosition(v));
         }
     }
 
@@ -167,20 +169,5 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
         Intent i = new Intent(getContext(), AccionContacto.class);
         i.putExtra("contacto", d);
         startActivityForResult(i, COD_ACTIVITY_EDITAR);
-    }
-
-    private void cargarDatos() {
-        contactos = new ArrayList<>();
-        contactos.add(new Contacto("Iván", "Gallego", "601245789", "yo@yo.com"));
-        contactos.add(new Contacto("Gallego", "Iván", "658984512", "yo@yo.com"));
-        contactos.add(new Contacto("Daniel", "Acabado", "", ""));
-        contactos.add(new Contacto("Estodorne", "Ideas", "658497415", "yo@yo.com"));
-        contactos.add(new Contacto("Carlos", "Apellido", "684974523", ""));
-        contactos.add(new Contacto("Juan", "Mastodonte", "", "yo@yo.com"));
-        contactos.add(new Contacto("Marcos", "Calatraba", "784569815", ""));
-        contactos.add(new Contacto("David", "Muñoz", "745123698", "yo@yo.com"));
-        contactos.add(new Contacto("Sandra", "López", "696952356", "yo@yo.com"));
-        contactos.add(new Contacto("Andrea", "García", "787878787", "yo@yo.com"));
-        contactos.add(new Contacto("Ainhoa", "García", "", "yo@yo.com"));
     }
 }

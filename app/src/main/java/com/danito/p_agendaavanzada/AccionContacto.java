@@ -43,7 +43,9 @@ public class AccionContacto extends Fragment implements View.OnFocusChangeListen
         view = v;
         Bundle args = getArguments();
 
-        contactoRecibido = (Contacto) args.get("contacto");
+        if (args != null) {
+            contactoRecibido = args.getParcelable("contacto");
+        }
         resetTint();
         proposito = contactoRecibido == null ? ADD : EDITAR;
 

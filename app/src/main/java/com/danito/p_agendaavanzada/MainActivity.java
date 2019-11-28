@@ -26,9 +26,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements
-        OnClickItemListener, OnImageClickListener, OnEditContact {
+        OnClickItemListener, OnImageClickListener, OnEditContact, OnAddContact {
 
-    private FragmentManager fragmentManager;
     public ArrayList<Contacto> contactos;
     private int indiceListaPulsado;
     private RecyclerView recyclerView;
@@ -47,9 +46,9 @@ public class MainActivity extends FragmentActivity implements
         setContentView(R.layout.activity_main);
         cargarDatos();
 
-        fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment, new VistaContactos());
+        transaction.add(R.id.fragment_container, new VistaContactos(contactos));
         transaction.commit();
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -169,19 +168,41 @@ public class MainActivity extends FragmentActivity implements
         startActivityForResult(i, COD_ACTIVITY_EDITAR);
     }
 
+    // El parámetro índice, me sirve para saber cuál es el dato que quiero eliminar al pulsar el botón aceptar
     @Override
-    public void OnSelectedItemListener(Contacto contacto) {
+    public void OnClickItemListener(Contacto contacto, int i) {
+        indiceListaPulsado = i;
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         AccionContacto fragment = new AccionContacto();
         Bundle args = new Bundle();
         args.putParcelable("contacto", contacto);
-        transaction.replace(R.id.fragment, fragment);
+        fragment.setArguments(args);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
     @Override
     public void OnEditContact(Contacto contacto) {
-        // Enviar datos a VistaContactos
+        contactos.set(indiceListaPulsado, contacto);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        VistaContactos fragment = new VistaContactos(contactos);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public void OnAddContact(Contacto contacto) {
+        contactos.add(contacto);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        VistaContactos fragment = new VistaContactos(contactos);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
@@ -190,8 +211,11 @@ public class MainActivity extends FragmentActivity implements
     }
 
     private void addContacto() {
-        Intent i = new Intent(this, AccionContacto.class);
-        startActivityForResult(i, COD_ACTIVITY_ADD);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, new AccionContacto());
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     @Override
