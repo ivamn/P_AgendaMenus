@@ -26,7 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements
-        OnClickItemListener, OnImageClickListener, OnEditContact, OnAddContact {
+        OnClickItemListener, OnImageClickListener, OnEditContact, OnAddContact, OnFabClicked {
 
     public ArrayList<Contacto> contactos;
     private int indiceListaPulsado;
@@ -50,14 +50,6 @@ public class MainActivity extends FragmentActivity implements
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.fragment_container, new VistaContactos(contactos));
         transaction.commit();
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addContacto();
-            }
-        });
     }
 
     private void mostrarPerfil(final Contacto contacto) {
@@ -206,16 +198,17 @@ public class MainActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onImageClick(Contacto contacto) {
-        mostrarPerfil(contacto);
-    }
-
-    private void addContacto() {
+    public void OnFabClicked() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, new AccionContacto());
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public void onImageClick(Contacto contacto) {
+        mostrarPerfil(contacto);
     }
 
     @Override

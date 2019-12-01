@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class VistaContactos extends Fragment implements View.OnClickListener {
@@ -25,9 +27,11 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
     private Adaptador adaptador;
     private OnClickItemListener clickItemListener;
     private OnImageClickListener imageClickListener;
+    private OnFabClicked fabClickListener;
     private ArrayList<Contacto> contactos;
     private SwipeDetector swipeDetector;
     private int indiceListaPulsado;
+    private FloatingActionButton fab;
 
     private final int COD_ACTIVITY_EDITAR = 1;
     private final int COD_ACTIVITY_ADD = 2;
@@ -43,6 +47,14 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.vista_contactos, container, false);
+
+        fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fabClickListener.OnFabClicked();
+            }
+        });
 
         swipeDetector = new SwipeDetector();
         adaptador = new Adaptador(contactos);
@@ -111,6 +123,7 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
         try {
             clickItemListener = (OnClickItemListener) context;
             imageClickListener = (OnImageClickListener) context;
+            fabClickListener = (OnFabClicked) context;
         } catch (ClassCastException e) {}
     }
 

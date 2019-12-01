@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class AccionContacto extends Fragment implements View.OnFocusChangeListener, View.OnClickListener {
 
     private OnEditContact editContact;
+    private OnAddContact addContact;
     private TextInputEditText editNombre, editApellido, editTelefono, editCorreo;
     private TextInputLayout editNombreContenedor;
     private Button aceptarButton;
@@ -129,7 +130,7 @@ public class AccionContacto extends Fragment implements View.OnFocusChangeListen
             } else {
                 Contacto nuevoContacto = generarNuevoContacto();
                 intent.putExtra("contacto", nuevoContacto);
-                editContact.OnEditContact(nuevoContacto);
+                addContact.OnAddContact(nuevoContacto);
             }
             resetTint();
         }
@@ -140,6 +141,7 @@ public class AccionContacto extends Fragment implements View.OnFocusChangeListen
         super.onAttach(context);
         try {
             editContact = (OnEditContact) context;
+            addContact = (OnAddContact) context;
         } catch (ClassCastException e){}
     }
 
