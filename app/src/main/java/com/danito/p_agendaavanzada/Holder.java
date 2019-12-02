@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
+
 class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private ImageView imagen;
     private TextView nombre, apellido, telefono, correo;
@@ -42,7 +44,7 @@ class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (imageClickListener != null) {
-            imageClickListener.onImageClick(contacto);
+            imageClickListener.onImageClick(contacto, v);
         }
     }
 }

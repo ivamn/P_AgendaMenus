@@ -2,157 +2,132 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
+    android:layout_margin="16dp"
     android:orientation="vertical">
 
-    <TextView
-        style="@android:style/TextAppearance.Material.Large"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:text="Contacto"
-        android:textAlignment="center" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1.5">
 
         <ImageView
-            android:id="@+id/imagenNombre"
-            android:layout_width="wrap_content"
+            android:id="@+id/profile_image_view"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/editNombreContenedor"
-            android:layout_alignBottom="@id/editNombreContenedor"
             android:layout_alignParentStart="true"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_contacto" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_default" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editNombreContenedor"
+        <EditText
+            android:id="@+id/editNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_centerInParent="true"
+            android:layout_toEndOf="@id/profile_image_view"
+            android:hint="Nombre"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:layout_below="@id/editNombre"
+            android:id="@+id/editApellido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/imagenNombre">
+            android:layout_margin="8dp"
+            android:layout_toEndOf="@id/profile_image_view"
+            android:hint="Apellido"
+            android:inputType="textPersonName" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNombre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/imagenApellido"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/editApellidoContenedor"
-            android:layout_alignBottom="@id/editApellidoContenedor"
-            android:layout_alignParentStart="true"
-            android:padding="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_apellidos"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editApellidoContenedor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/imagenApellido">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editApellido"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Apellido"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/imagenTelefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/editTelefonoContenedor"
-            android:layout_alignBottom="@id/editTelefonoContenedor"
+            android:layout_alignTop="@id/editTelefono"
+            android:layout_alignBottom="@id/editTelefono"
             android:layout_alignParentStart="true"
             android:padding="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_telefono" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTelefonoContenedor"
+        <EditText
+            android:id="@+id/editTelefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/imagenTelefono">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTelefono"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Teléfono"
-                android:inputType="phone" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_toEndOf="@id/imagenTelefono"
+            android:hint="Teléfono"
+            android:inputType="phone" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/imagenCorreo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/editCorreoContenedor"
-            android:layout_alignBottom="@id/editCorreoContenedor"
+            android:layout_alignTop="@id/editCorreo"
+            android:layout_alignBottom="@id/editCorreo"
             android:layout_alignParentStart="true"
             android:padding="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_mail" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editCorreoContenedor"
+        <EditText
+            android:id="@+id/editCorreo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/imagenCorreo">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Correo"
-                android:inputType="textEmailAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_toEndOf="@id/imagenCorreo"
+            android:hint="Correo"
+            android:inputType="textEmailAddress" />
     </RelativeLayout>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
+        <RadioButton
+            android:text="Famillia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <RadioButton
+            android:text="Trabajo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <RadioButton
+            android:text="Amigos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </RadioGroup>
 
     <Button
         android:id="@+id/aceptar"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
         android:layout_gravity="center_horizontal"
-        android:text="Aceptar"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:layout_weight="0.5"
+        android:text="Aceptar" />
 
 </LinearLayout>

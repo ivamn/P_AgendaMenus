@@ -3,40 +3,47 @@ package com.danito.p_agendaavanzada;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danito.p_agendaavanzada.interfaces.OnClickItemListener;
+import com.danito.p_agendaavanzada.interfaces.OnFabClicked;
+import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class VistaContactos extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private Adaptador adaptador;
     private OnClickItemListener clickItemListener;
-    private OnImageClickListener imageClickListener;
     private OnFabClicked fabClickListener;
     private ArrayList<Contacto> contactos;
     private SwipeDetector swipeDetector;
     private int indiceListaPulsado;
     private FloatingActionButton fab;
-
-    private final int COD_ACTIVITY_EDITAR = 1;
-    private final int COD_ACTIVITY_ADD = 2;
-    private final int COD_ELEGIR_IMAGEN = 3;
-    private final int COD_TOMAR_FOTO = 4;
+    private final int COD_ELEGIR_IMAGEN = 1;
+    private final int COD_TOMAR_FOTO = 2;
 
     public VistaContactos(ArrayList<Contacto> contactos) {
         this.contactos = contactos;
@@ -91,12 +98,68 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
 
         adaptador.setImageClickListener(new OnImageClickListener() {
             @Override
-            public void onImageClick(final Contacto contacto) {
-                imageClickListener.onImageClick(contacto);
+            public void onImageClick(final Contacto contacto, View v) {
+                PopupMenu pop = new PopupMenu(getContext(), v);
+                indiceListaPulsado = recyclerView.getChildAdapterPosition(v);
+                pop.getMenuInflater().inflate(R.menu.menu_foto, pop.getMenu());
+                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.camera:
+                                tomarFoto();
+                                break;
+                            case R.id.galeria:
+                                elegirImagen();
+                                break;
+                            case R.id.borrar:
+                                contacto.setImagen(null);
+                                recyclerView.setAdapter(adaptador);
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                pop.show();
             }
         });
-
         return rootView;
+    }
+
+    private void tomarFoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(intent, COD_TOMAR_FOTO);
+        }
+    }
+
+    private void elegirImagen() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("image/*");
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(intent, COD_ELEGIR_IMAGEN);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == COD_ELEGIR_IMAGEN && resultCode == RESULT_OK && data != null) {
+            Uri rutaImagen = data.getData();
+            contactos.get(indiceListaPulsado).setImagen(bitmapFromUri(rutaImagen));
+        } else if (requestCode == COD_TOMAR_FOTO && resultCode == RESULT_OK && data != null) {
+            contactos.get(indiceListaPulsado).setImagen((Bitmap) data.getExtras().get("data"));
+        } else if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(getContext(), "Se ha cancelado la operación", Toast.LENGTH_LONG).show();
+        }
+        recyclerView.setAdapter(adaptador);
+    }
+
+    private Bitmap bitmapFromUri(Uri uri) {
+        ImageView imageViewTemp = new ImageView(getContext());
+        imageViewTemp.setImageURI(uri);
+        BitmapDrawable d = (BitmapDrawable) imageViewTemp.getDrawable();
+        return d.getBitmap();
     }
 
     @Override
@@ -122,7 +185,6 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
         super.onAttach(context);
         try {
             clickItemListener = (OnClickItemListener) context;
-            imageClickListener = (OnImageClickListener) context;
             fabClickListener = (OnFabClicked) context;
         } catch (ClassCastException e) {}
     }
@@ -176,11 +238,5 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
             }
         });
         builder.create().show();
-    }
-
-    private void editarDatos(Contacto d) {
-        Intent i = new Intent(getContext(), AccionContacto.class);
-        i.putExtra("contacto", d);
-        startActivityForResult(i, COD_ACTIVITY_EDITAR);
     }
 }

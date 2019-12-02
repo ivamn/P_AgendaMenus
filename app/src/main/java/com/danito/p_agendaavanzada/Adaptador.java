@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
+
 import java.util.ArrayList;
 
 public class Adaptador extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
@@ -24,15 +26,15 @@ public class Adaptador extends RecyclerView.Adapter implements View.OnClickListe
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.entrada_agenda, parent, false);
+        final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.entrada_agenda, parent, false);
         v.setOnLongClickListener(this);
         v.setOnClickListener(this);
         v.setOnTouchListener(this);
         Holder h = new Holder(v);
         h.setImageClickListener(new OnImageClickListener() {
             @Override
-            public void onImageClick(Contacto contacto) {
-                imageClickListener.onImageClick(contacto);
+            public void onImageClick(Contacto contacto, View view) {
+                imageClickListener.onImageClick(contacto, v);
             }
         });
         return h;
