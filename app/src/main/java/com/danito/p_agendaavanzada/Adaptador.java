@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,16 +13,52 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Adaptador extends RecyclerView.Adapter implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
-    private ArrayList<Contacto> contactos;
+public class Adaptador extends RecyclerView.Adapter
+        implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener, Filterable {
+    private ArrayList<Contacto> contactos, contactosCompletos;
     private View.OnClickListener clickListener;
     private OnImageClickListener imageClickListener;
     private View.OnLongClickListener longClickListener;
     private View.OnTouchListener touchListener;
 
+    private Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence seleccion) {
+            ArrayList<Contacto> datosFiltrados = new ArrayList<>();
+            if (seleccion == null || seleccion.length() == 0) {
+                datosFiltrados.addAll(contactosCompletos);
+            } else if (seleccion.equals("Todo")) {
+                datosFiltrados.addAll(contactosCompletos);
+            } else {
+                for (Contacto c : contactos) {
+                    if (seleccion.equals("Amigo") && c.isAmigo()) {
+                        datosFiltrados.add(c);
+                    } else if (seleccion.equals("Trabajo") && c.isTrabajo()) {
+                        datosFiltrados.add(c);
+                    } else if (seleccion.equals("Familia") && c.isFamilia()) {
+                        datosFiltrados.add(c);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = datosFiltrados;
+            results.count = datosFiltrados.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            contactos.clear();
+            contactos.addAll((List)results.values);
+            notifyDataSetChanged();
+        }
+    };
+
     public Adaptador(ArrayList<Contacto> contactos) {
         this.contactos = contactos;
+        contactosCompletos = new ArrayList<>(contactos);
     }
 
     @NonNull
@@ -48,6 +86,11 @@ public class Adaptador extends RecyclerView.Adapter implements View.OnClickListe
     @Override
     public int getItemCount() {
         return contactos.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

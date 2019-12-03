@@ -10,6 +10,9 @@ public class Contacto implements Parcelable {
     private String telefono;
     private String correo;
     private Bitmap imagen;
+    private boolean amigo;
+    private boolean trabajo;
+    private boolean familia;
 
     public Contacto() {
     }
@@ -27,6 +30,30 @@ public class Contacto implements Parcelable {
         this.apellido = apellido;
         this.telefono = telefono;
         this.correo = correo;
+    }
+
+    public boolean isAmigo() {
+        return amigo;
+    }
+
+    public void setAmigo(boolean amigo) {
+        this.amigo = amigo;
+    }
+
+    public boolean isTrabajo() {
+        return trabajo;
+    }
+
+    public void setTrabajo(boolean trabajo) {
+        this.trabajo = trabajo;
+    }
+
+    public boolean isFamilia() {
+        return familia;
+    }
+
+    public void setFamilia(boolean familia) {
+        this.familia = familia;
     }
 
     public String getNombre() {

@@ -12,9 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +38,7 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
     private Bitmap bitmap;
     private Contacto contacto;
     private ImageView imageView;
+    private RadioButton radioButtonFamilia, radioButtonTrabajo, radioButtonAmigos;
     private final int EDITAR = 0;
     private final int ADD = 1;
     private final int COD_ELEGIR_IMAGEN = 2;
@@ -82,6 +85,10 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
                 pop.show();
             }
         });
+
+        radioButtonAmigos = v.findViewById(R.id.radio_amigo);
+        radioButtonFamilia = v.findViewById(R.id.radio_familia);
+        radioButtonTrabajo = v.findViewById(R.id.radio_trabajo);
         editNombre = v.findViewById(R.id.editNombre);
         editApellido = v.findViewById(R.id.editApellido);
         editTelefono = v.findViewById(R.id.editTelefono);
@@ -97,6 +104,9 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
             editApellido.setText(contacto.getApellido());
             editTelefono.setText(contacto.getTelefono());
             editCorreo.setText(contacto.getCorreo());
+            if (contacto.isTrabajo()) radioButtonTrabajo.setChecked(true);
+            else if (contacto.isAmigo()) radioButtonAmigos.setChecked(true);
+            else if (contacto.isFamilia()) radioButtonFamilia.setChecked(true);
         }
 
         return v;
@@ -104,6 +114,9 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
 
     public Contacto generarNuevoContacto() {
         Contacto d = new Contacto();
+        d.setAmigo(radioButtonAmigos.isChecked());
+        d.setTrabajo(radioButtonTrabajo.isChecked());
+        d.setFamilia(radioButtonFamilia.isChecked());
         d.setImagen(bitmap);
         d.setNombre(editNombre.getText().toString());
         d.setApellido(editApellido.getText().toString());
@@ -114,6 +127,9 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
 
     public void editarContacto() {
         contacto.setImagen(bitmap);
+        contacto.setAmigo(radioButtonAmigos.isChecked());
+        contacto.setTrabajo(radioButtonTrabajo.isChecked());
+        contacto.setFamilia(radioButtonFamilia.isChecked());
         contacto.setNombre(editNombre.getText().toString());
         contacto.setApellido(editApellido.getText().toString());
         contacto.setTelefono(editTelefono.getText().toString());

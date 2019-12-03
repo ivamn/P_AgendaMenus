@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +36,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class VistaContactos extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
-    private Adaptador adaptador;
+    public Adaptador adaptador;
     private OnClickItemListener clickItemListener;
     private OnFabClicked fabClickListener;
     private ArrayList<Contacto> contactos;
@@ -186,7 +187,8 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
         try {
             clickItemListener = (OnClickItemListener) context;
             fabClickListener = (OnFabClicked) context;
-        } catch (ClassCastException e) {}
+        } catch (ClassCastException e) {
+        }
     }
 
     private void llamarContacto(final Contacto d) {
