@@ -1,4 +1,4 @@
-package com.danito.p_agendaavanzada;
+package com.danito.p_agendaavanzada.recycler;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danito.p_agendaavanzada.pojo.Contacto;
+import com.danito.p_agendaavanzada.R;
 import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
 
 class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {

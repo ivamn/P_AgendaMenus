@@ -1,4 +1,4 @@
-package com.danito.p_agendaavanzada;
+package com.danito.p_agendaavanzada.pojo;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;

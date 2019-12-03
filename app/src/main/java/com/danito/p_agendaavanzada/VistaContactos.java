@@ -19,14 +19,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danito.p_agendaavanzada.Util.Layout;
 import com.danito.p_agendaavanzada.interfaces.OnClickItemListener;
 import com.danito.p_agendaavanzada.interfaces.OnFabClicked;
 import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
+import com.danito.p_agendaavanzada.pojo.Contacto;
+import com.danito.p_agendaavanzada.recycler.Adaptador;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -45,9 +48,11 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
     private FloatingActionButton fab;
     private final int COD_ELEGIR_IMAGEN = 1;
     private final int COD_TOMAR_FOTO = 2;
+    private Layout layout;
 
-    public VistaContactos(ArrayList<Contacto> contactos) {
+    public VistaContactos(ArrayList<Contacto> contactos, Layout layout) {
         this.contactos = contactos;
+        this.layout = layout;
     }
 
     @Nullable
@@ -65,10 +70,14 @@ public class VistaContactos extends Fragment implements View.OnClickListener {
         });
 
         swipeDetector = new SwipeDetector();
-        adaptador = new Adaptador(contactos);
+        adaptador = new Adaptador(contactos, layout);
         recyclerView = rootView.findViewById(R.id.recycler);
         recyclerView.setAdapter(adaptador);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        if (layout == Layout.GRID) {
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        } else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        }
 
         adaptador.setOnTouchListener(swipeDetector);
         adaptador.setOnClickListener(this);

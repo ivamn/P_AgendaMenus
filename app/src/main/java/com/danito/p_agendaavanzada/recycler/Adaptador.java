@@ -1,4 +1,4 @@
-package com.danito.p_agendaavanzada;
+package com.danito.p_agendaavanzada.recycler;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -10,6 +10,10 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.danito.p_agendaavanzada.Util;
+import com.danito.p_agendaavanzada.Util.Layout;
+import com.danito.p_agendaavanzada.pojo.Contacto;
+import com.danito.p_agendaavanzada.R;
 import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
 
 import java.util.ArrayList;
@@ -22,6 +26,7 @@ public class Adaptador extends RecyclerView.Adapter
     private OnImageClickListener imageClickListener;
     private View.OnLongClickListener longClickListener;
     private View.OnTouchListener touchListener;
+    private Layout layout;
 
     private Filter filter = new Filter() {
         @Override
@@ -56,31 +61,52 @@ public class Adaptador extends RecyclerView.Adapter
         }
     };
 
-    public Adaptador(ArrayList<Contacto> contactos) {
+    public Adaptador(ArrayList<Contacto> contactos, Layout layout) {
         this.contactos = contactos;
         contactosCompletos = new ArrayList<>(contactos);
+        this.layout = layout;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.entrada_agenda, parent, false);
-        v.setOnLongClickListener(this);
-        v.setOnClickListener(this);
-        v.setOnTouchListener(this);
-        Holder h = new Holder(v);
-        h.setImageClickListener(new OnImageClickListener() {
-            @Override
-            public void onImageClick(Contacto contacto, View view) {
-                imageClickListener.onImageClick(contacto, v);
-            }
-        });
-        return h;
+        final View v;
+        if (layout == Layout.GRID) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.entrada_agenda_compact, parent, false);
+            v.setOnLongClickListener(this);
+            v.setOnClickListener(this);
+            v.setOnTouchListener(this);
+            HolderCompact h = new HolderCompact(v);
+            h.setImageClickListener(new OnImageClickListener() {
+                @Override
+                public void onImageClick(Contacto contacto, View view) {
+                    imageClickListener.onImageClick(contacto, v);
+                }
+            });
+            return h;
+        } else {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.entrada_agenda, parent, false);
+            v.setOnLongClickListener(this);
+            v.setOnClickListener(this);
+            v.setOnTouchListener(this);
+            Holder h = new Holder(v);
+            h.setImageClickListener(new OnImageClickListener() {
+                @Override
+                public void onImageClick(Contacto contacto, View view) {
+                    imageClickListener.onImageClick(contacto, v);
+                }
+            });
+            return h;
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((Holder) holder).bind(contactos.get(position));
+        if (layout == Layout.GRID) {
+            ((HolderCompact) holder).bind(contactos.get(position));
+        } else {
+            ((Holder) holder).bind(contactos.get(position));
+        }
     }
 
     @Override

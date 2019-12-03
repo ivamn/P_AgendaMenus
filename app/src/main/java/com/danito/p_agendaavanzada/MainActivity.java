@@ -1,9 +1,9 @@
 package com.danito.p_agendaavanzada;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -11,14 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.danito.p_agendaavanzada.Util.Layout;
 import com.danito.p_agendaavanzada.interfaces.OnAddContact;
 import com.danito.p_agendaavanzada.interfaces.OnClickItemListener;
 import com.danito.p_agendaavanzada.interfaces.OnEditContact;
 import com.danito.p_agendaavanzada.interfaces.OnFabClicked;
+import com.danito.p_agendaavanzada.pojo.Contacto;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements
     private int indiceListaPulsado;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private Layout layout;
+    private VistaContactos vistaContactos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +49,13 @@ public class MainActivity extends AppCompatActivity implements
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        final VistaContactos vistaContactos = new VistaContactos(contactos);
-        transaction.add(R.id.fragment_container, vistaContactos);
-        transaction.commit();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layout = Layout.GRID;
+        } else {
+            layout = Layout.LINEAR;
+        }
+
+        replaceFragment();
 
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -77,6 +82,15 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
+    private void replaceFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        vistaContactos = new VistaContactos(contactos, layout);
+        transaction.add(R.id.fragment_container, vistaContactos);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     // El parámetro índice, me sirve para saber cuál es el dato que quiero eliminar al pulsar el botón aceptar
     @Override
     public void OnClickItemListener(Contacto contacto, int i) {
@@ -97,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements
         contactos.set(indiceListaPulsado, contacto);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        VistaContactos fragment = new VistaContactos(contactos);
+        VistaContactos fragment = new VistaContactos(contactos, layout);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -108,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements
         contactos.add(contacto);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        VistaContactos fragment = new VistaContactos(contactos);
+        VistaContactos fragment = new VistaContactos(contactos, layout);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -131,6 +145,14 @@ public class MainActivity extends AppCompatActivity implements
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
+            case R.id.linear_option_menu:
+                layout = Layout.LINEAR;
+                replaceFragment();
+                break;
+            case R.id.grid_option_menu:
+                layout = Layout.GRID;
+                replaceFragment();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -148,5 +170,11 @@ public class MainActivity extends AppCompatActivity implements
         contactos.add(new Contacto("Sandra", "López", "696952356", "yo@yo.com"));
         contactos.add(new Contacto("Andrea", "García", "787878787", "yo@yo.com"));
         contactos.add(new Contacto("Ainhoa", "García", "", "yo@yo.com"));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_layout, menu);
+        return true;
     }
 }

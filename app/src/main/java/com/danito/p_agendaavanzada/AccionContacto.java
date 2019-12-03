@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -25,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.danito.p_agendaavanzada.interfaces.OnAddContact;
 import com.danito.p_agendaavanzada.interfaces.OnEditContact;
+import com.danito.p_agendaavanzada.pojo.Contacto;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
