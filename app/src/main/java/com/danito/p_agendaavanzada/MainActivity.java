@@ -19,6 +19,7 @@ import com.danito.p_agendaavanzada.interfaces.OnAddContact;
 import com.danito.p_agendaavanzada.interfaces.OnClickItemListener;
 import com.danito.p_agendaavanzada.interfaces.OnEditContact;
 import com.danito.p_agendaavanzada.interfaces.OnFabClicked;
+import com.danito.p_agendaavanzada.interfaces.OnRecyclerUpdated;
 import com.danito.p_agendaavanzada.pojo.Contacto;
 import com.google.android.material.navigation.NavigationView;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
     private NavigationView navigationView;
     private Layout layout;
     private VistaContactos vistaContactos;
+    private OnRecyclerUpdated onRecyclerUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         vistaContactos = new VistaContactos(contactos, layout);
+        onRecyclerUpdated = vistaContactos;
         transaction.add(R.id.fragment_container, vistaContactos);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -147,11 +150,11 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.linear_option_menu:
                 layout = Layout.LINEAR;
-                replaceFragment();
+                onRecyclerUpdated.onRecyclerUpdated(Layout.LINEAR);
                 break;
             case R.id.grid_option_menu:
                 layout = Layout.GRID;
-                replaceFragment();
+                onRecyclerUpdated.onRecyclerUpdated(Layout.GRID);
                 break;
         }
         return super.onOptionsItemSelected(item);
