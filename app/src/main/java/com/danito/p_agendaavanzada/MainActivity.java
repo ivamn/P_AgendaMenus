@@ -19,6 +19,7 @@ import com.danito.p_agendaavanzada.interfaces.OnAddContact;
 import com.danito.p_agendaavanzada.interfaces.OnClickItemListener;
 import com.danito.p_agendaavanzada.interfaces.OnEditContact;
 import com.danito.p_agendaavanzada.interfaces.OnFabClicked;
+import com.danito.p_agendaavanzada.interfaces.OnRecyclerFiltered;
 import com.danito.p_agendaavanzada.interfaces.OnRecyclerUpdated;
 import com.danito.p_agendaavanzada.pojo.Contacto;
 import com.google.android.material.navigation.NavigationView;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         VistaContactos fragment = new VistaContactos(contactos, layout);
+        onRecyclerUpdated = fragment;
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         VistaContactos fragment = new VistaContactos(contactos, layout);
+        onRecyclerUpdated = fragment;
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
