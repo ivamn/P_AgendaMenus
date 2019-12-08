@@ -43,7 +43,7 @@ public class VistaContactos extends Fragment implements View.OnClickListener, On
     private final int COD_ELEGIR_IMAGEN = 1;
     private final int COD_TOMAR_FOTO = 2;
     public Adaptador adaptador;
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     private OnClickItemListener clickItemListener;
     private OnFabClicked fabClickListener;
     private ArrayList<Contacto> contactos;
@@ -67,7 +67,7 @@ public class VistaContactos extends Fragment implements View.OnClickListener, On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabClickListener.OnFabClicked();
+                fabClickListener.onFabClicked();
             }
         });
 
@@ -165,7 +165,7 @@ public class VistaContactos extends Fragment implements View.OnClickListener, On
                     break;
             }
         } else {
-            clickItemListener.OnClickItemListener(contacto, recyclerView.getChildAdapterPosition(v));
+            clickItemListener.onClickItemListener(contacto, recyclerView.getChildAdapterPosition(v));
         }
     }
 

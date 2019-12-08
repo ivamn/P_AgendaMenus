@@ -10,11 +10,10 @@ import android.widget.Filterable;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.danito.p_agendaavanzada.Util;
-import com.danito.p_agendaavanzada.Util.Layout;
-import com.danito.p_agendaavanzada.pojo.Contacto;
 import com.danito.p_agendaavanzada.R;
+import com.danito.p_agendaavanzada.Util.Layout;
 import com.danito.p_agendaavanzada.interfaces.OnImageClickListener;
+import com.danito.p_agendaavanzada.pojo.Contacto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +29,18 @@ public class Adaptador extends RecyclerView.Adapter
 
     private Filter filter = new Filter() {
         @Override
-        protected FilterResults performFiltering(CharSequence seleccion) {
+        protected FilterResults performFiltering(CharSequence constraint) {
+            String seleccion = constraint.toString();
             ArrayList<Contacto> datosFiltrados = new ArrayList<>();
-            if (seleccion == null || seleccion.length() == 0) {
+            if (constraint == null || seleccion.length() == 0) {
                 datosFiltrados.addAll(contactosCompletos);
             } else if (seleccion.equals("Todo")) {
                 datosFiltrados.addAll(contactosCompletos);
             } else {
                 for (Contacto c : contactos) {
-                    if (seleccion.equals("Amigo") && c.isAmigo()) {
-                        datosFiltrados.add(c);
-                    } else if (seleccion.equals("Trabajo") && c.isTrabajo()) {
-                        datosFiltrados.add(c);
-                    } else if (seleccion.equals("Familia") && c.isFamilia()) {
-                        datosFiltrados.add(c);
-                    }
+                    if (seleccion.equals("Amigo") && c.isAmigo()) datosFiltrados.add(c);
+                    else if (seleccion.equals("Trabajo") && c.isTrabajo()) datosFiltrados.add(c);
+                    else if (seleccion.equals("Familia") && c.isFamilia()) datosFiltrados.add(c);
                 }
             }
             FilterResults results = new FilterResults();
@@ -56,7 +52,7 @@ public class Adaptador extends RecyclerView.Adapter
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             contactos.clear();
-            contactos.addAll((List)results.values);
+            contactos.addAll((List) results.values);
             notifyDataSetChanged();
         }
     };

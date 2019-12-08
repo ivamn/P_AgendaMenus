@@ -15,12 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.danito.p_agendaavanzada.Util.Layout;
-import com.danito.p_agendaavanzada.interfaces.OnAddContact;
-import com.danito.p_agendaavanzada.interfaces.OnClickItemListener;
-import com.danito.p_agendaavanzada.interfaces.OnEditContact;
-import com.danito.p_agendaavanzada.interfaces.OnFabClicked;
-import com.danito.p_agendaavanzada.interfaces.OnRecyclerFiltered;
-import com.danito.p_agendaavanzada.interfaces.OnRecyclerUpdated;
+import com.danito.p_agendaavanzada.interfaces.*;
 import com.danito.p_agendaavanzada.pojo.Contacto;
 import com.google.android.material.navigation.NavigationView;
 
@@ -75,9 +70,10 @@ public class MainActivity extends AppCompatActivity implements
                         vistaContactos.adaptador.getFilter().filter("Trabajo");
                         break;
                     case R.id.todos_menu_option:
-                        vistaContactos.adaptador.getFilter().filter(null);
+                        vistaContactos.adaptador.getFilter().filter("Todo");
                         break;
                 }
+                onRecyclerUpdated.onRecyclerUpdated(layout);
                 menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
                 return true;
@@ -97,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
 
     // El parámetro índice, me sirve para saber cuál es el dato que quiero eliminar al pulsar el botón aceptar
     @Override
-    public void OnClickItemListener(Contacto contacto, int i) {
+    public void onClickItemListener(Contacto contacto, int i) {
         indiceListaPulsado = i;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -111,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void OnEditContact(Contacto contacto) {
+    public void onEditContact(Contacto contacto) {
         contactos.set(indiceListaPulsado, contacto);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -123,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void OnAddContact(Contacto contacto) {
+    public void onAddContact(Contacto contacto) {
         contactos.add(contacto);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -134,14 +130,14 @@ public class MainActivity extends AppCompatActivity implements
         transaction.commit();
     }
 
-    @Override
-    public void OnFabClicked() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fragment_container, new AccionContacto());
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+        @Override
+        public void onFabClicked() {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container, new AccionContacto());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

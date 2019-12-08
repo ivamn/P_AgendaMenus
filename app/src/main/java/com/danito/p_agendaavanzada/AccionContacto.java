@@ -44,14 +44,12 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
     private final int COD_ELEGIR_IMAGEN = 2;
     private final int COD_TOMAR_FOTO = 3;
     private int proposito;
-    private View view;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.accion_contacto, container, false);
-        view = v;
         Bundle args = getArguments();
 
         if (args != null) {
@@ -142,11 +140,11 @@ public class AccionContacto extends Fragment implements View.OnClickListener {
             Intent intent = new Intent();
             if (proposito == EDITAR) {
                 editarContacto();
-                editContact.OnEditContact(contacto);
+                editContact.onEditContact(contacto);
             } else {
                 Contacto nuevoContacto = generarNuevoContacto();
                 intent.putExtra("contacto", nuevoContacto);
-                addContact.OnAddContact(nuevoContacto);
+                addContact.onAddContact(nuevoContacto);
             }
         }
     }
